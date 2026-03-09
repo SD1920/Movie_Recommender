@@ -35,9 +35,18 @@ def fetch_poster(movie_id):
     return "https://via.placeholder.com/500x750/666666/ffffff?text=Poster+Not+Available"
 
 def recommend(movie):
+    import numpy as np
+    from scipy.sparse import issparse
+    
     movie_index = movies_df[movies_df['title'] == movie].index[0]
-    distances = list(enumerate(similarity[int(movie_index)]))
-    movies_list = sorted(distances, reverse=True, key=lambda x: x[1])[1:6]
+    
+    # Handle sparse matrix
+    if issparse(similarity):
+        distances = similarity[int(movie_index)].toarray().flatten()
+    else:
+        distances = similarity[int(movie_index)]
+    
+    movies_list = sorted(list(enumerate(distances)), reverse=True, key=lambda x: x[1])[1:6]
     recommended_movies = []
     recommended_posters = []
     for i in movies_list:
