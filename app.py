@@ -36,8 +36,8 @@ def fetch_poster(movie_id):
 
 def recommend(movie):
     movie_index = movies_df[movies_df['title'] == movie].index[0]
-    distances = similarity[int(movie_index)]  # Convert to int
-    movies_list = sorted(list(enumerate(distances)), reverse=True, key=lambda x: x[1])[1:6]
+    distances = list(enumerate(similarity[int(movie_index)]))
+    movies_list = sorted(distances, reverse=True, key=lambda x: x[1])[1:6]
     recommended_movies = []
     recommended_posters = []
     for i in movies_list:
